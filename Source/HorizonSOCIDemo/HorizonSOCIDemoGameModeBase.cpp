@@ -51,11 +51,13 @@ AHorizonSOCIDemoGameModeBase::AHorizonSOCIDemoGameModeBase() {
 
 	//GameLogDir()
 	FString folderPath = (FPaths::GamePersistentDownloadDir() + "/Horizon/");
-
+	//../../../HorizonSOCIDemo/PersistentDownloadDir/Horizon/
 	UE_LOG(LogTemp, Log, TEXT("======================1FolderPath: %s"), *folderPath);
 
 	UE_LOG(LogTemp, Log, TEXT("======================FPlatformProcess::BaseDir(): %s"), *FString(FPlatformProcess::BaseDir()));
-	FString fullPath = FPaths::ConvertRelativePathToFull("../../../HorizonSOCIDemo/PersistentDownloadDir/Horizon/");
+	FString relativePath = "../../../HorizonSOCIDemo/PersistentDownloadDir/Horizon/";
+	FString fullPath = FPaths::ConvertRelativePathToFull(relativePath);
+	UE_LOG(LogTemp, Log, TEXT("======================ConvertRelativePathToFull: %s"), *fullPath);
 	//FString folderPath = (FPaths::GameLogDir() + "/Horizon/");
 	folderPath = FPaths::ConvertRelativePathToFull(folderPath);
 	UE_LOG(LogTemp, Log, TEXT("======================2FolderPath: %s"), *folderPath);
