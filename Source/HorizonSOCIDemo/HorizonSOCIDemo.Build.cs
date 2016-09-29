@@ -11,11 +11,12 @@ public class HorizonSOCIDemo : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "soci_core", "soci_sqlite3" });
-
-
+       // PrivateDependencyModuleNames.AddRange(new string[] { "sqlite3Static" });
+        System.Diagnostics.Debug.WriteLine("===== ModuleLibSqlite3PublicIncludePath:" + ModuleLibSqlite3PublicIncludePath);
         PublicIncludePaths.AddRange(
           new string[] {
                 ModuleLibSociPublicIncludePath,
+                ModuleLibSqlite3PublicIncludePath,
 
               // ... add public include paths required here ...
           }
@@ -32,6 +33,10 @@ public class HorizonSOCIDemo : ModuleRules
 
         // Uncomment if you are using online features
         // PrivateDependencyModuleNames.Add("OnlineSubsystem");
+
+        bEnableExceptions = true;
+        // eventually needed as well
+        UEBuildConfiguration.bForceEnableExceptions = true;
 
         // To include OnlineSubsystemSteam, add it to the plugins section in your uproject file with the Enabled attribute set to true
     }
@@ -50,6 +55,16 @@ public class HorizonSOCIDemo : ModuleRules
         get
         {
             return Path.GetFullPath(Path.Combine(ModuleRootPath, "..", "..", "Plugins", "HorizonSOCIPlugin", "Source", "ThirdParty", "LibSoci", "soci", "include"));
+        }
+    }
+
+
+
+    private string ModuleLibSqlite3PublicIncludePath
+    {
+        get
+        {
+            return Path.GetFullPath(Path.Combine(ModuleRootPath, "..", "..", "Plugins", "HorizonSOCIPlugin", "Source", "ThirdParty", "LibSqlite3", "sqlite3", "src"));
         }
     }
 }
