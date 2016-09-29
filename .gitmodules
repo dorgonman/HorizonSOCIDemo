@@ -1,0 +1,3 @@
+[submodule "Plugins/HorizonSOCIPlugin"]
+	path = Plugins/HorizonSOCIPlugin
+	url = git@bitbucket.org:horizonstudio/horizonsociplugin.git
