@@ -12,7 +12,7 @@ UCLASS()
 class HORIZONSOCIDEMO_API AHorizonSOCIDemoGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+	AHorizonSOCIDemoGameModeBase();
 	
 	
 	
