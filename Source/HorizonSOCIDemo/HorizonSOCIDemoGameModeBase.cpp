@@ -44,8 +44,13 @@ static FORCEINLINE void CreateDirectoryRecursively(FString FolderToMake)
 		LoopItr++;
 	}
 }
+
+#if defined(PLATFORM_ANDROID)
+#include "Android/AndroidFile.h"
+#endif
 AHorizonSOCIDemoGameModeBase::AHorizonSOCIDemoGameModeBase() {
-	
+
+
 
 	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
 
@@ -65,6 +70,13 @@ AHorizonSOCIDemoGameModeBase::AHorizonSOCIDemoGameModeBase() {
 
 	FString connectString = folderPath + FString("save.db");
 
+
+#if defined(PLATFORM_ANDROID)
+	IAndroidPlatformFile& androidPlatformFile = IAndroidPlatformFile::GetPlatformPhysical();
+	FString androidFileRoot = androidPlatformFile.FileRootPath(*connectString);
+	UE_LOG(LogTemp, Log, TEXT("======================androidFileRoot: %s"), *androidFileRoot);
+#endif
+
 	FString testFilePath = folderPath + FString("test.txt");
 	IFileHandle* FileHandle = PlatformFile.OpenWrite(*testFilePath);
 	if (FileHandle)
@@ -78,6 +90,7 @@ AHorizonSOCIDemoGameModeBase::AHorizonSOCIDemoGameModeBase() {
 
 		delete FileHandle;
 	}
+
 
 	bool result = PlatformFile.CreateDirectory(*folderPath);
 	UE_LOG(LogTemp, Log, TEXT("======================connectString: %s"), *connectString);
