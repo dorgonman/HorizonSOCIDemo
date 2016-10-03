@@ -45,61 +45,61 @@ static FORCEINLINE void CreateDirectoryRecursively(FString FolderToMake)
 	}
 }
 
-#if defined(PLATFORM_ANDROID)
-#include "Android/AndroidFile.h"
+#if (PLATFORM_ANDROID)
+#include "android/androidfile.h"
+// constructs the base path for any files which are not in obb/pak data
+//const fstring &getfilebasepath()
+//{
+//	static fstring basepath = gfilepathbase + fstring(filebase_directory) + fapp::getgamename() + fstring("/");
+//	return basepath;
+//}
 #endif
+
+
 AHorizonSOCIDemoGameModeBase::AHorizonSOCIDemoGameModeBase() {
 
-
-
-	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
-
-	//GameLogDir()
-	FString folderPath = (FPaths::GamePersistentDownloadDir() + "/Horizon/");
+	
 	//../../../HorizonSOCIDemo/PersistentDownloadDir/Horizon/
-	UE_LOG(LogTemp, Log, TEXT("======================1FolderPath: %s"), *folderPath);
+	
 
-	UE_LOG(LogTemp, Log, TEXT("======================FPlatformProcess::BaseDir(): %s"), *FString(FPlatformProcess::BaseDir()));
-	FString relativePath = "../../../HorizonSOCIDemo/PersistentDownloadDir/Horizon/";
-	FString fullPath = FPaths::ConvertRelativePathToFull(relativePath);
-	UE_LOG(LogTemp, Log, TEXT("======================ConvertRelativePathToFull: %s"), *fullPath);
-	//FString folderPath = (FPaths::GameLogDir() + "/Horizon/");
-	folderPath = FPaths::ConvertRelativePathToFull(folderPath);
-	UE_LOG(LogTemp, Log, TEXT("======================2FolderPath: %s"), *folderPath);
-	CreateDirectoryRecursively(folderPath);
-
-	FString connectString = folderPath + FString("save.db");
-
-
-#if defined(PLATFORM_ANDROID)
+#if (PLATFORM_ANDROID)
+	//GExternalFilePath;
 	IAndroidPlatformFile& androidPlatformFile = IAndroidPlatformFile::GetPlatformPhysical();
-	FString androidFileRoot = androidPlatformFile.FileRootPath(*connectString);
-	UE_LOG(LogTemp, Log, TEXT("======================androidFileRoot: %s"), *androidFileRoot);
+	FString folderPath = androidPlatformFile.FileRootPath(TEXT("")) + FPaths::GamePersistentDownloadDir() + "/Horizon/";
+	//folderPath = androidPlatformFile.FileRootPath(*folderPath);
+#else
+	FString folderPath = (FPaths::GamePersistentDownloadDir() + "/Horizon/");
+	folderPath = FPaths::ConvertRelativePathToFull(folderPath);
 #endif
 
-	FString testFilePath = folderPath + FString("test.txt");
-	IFileHandle* FileHandle = PlatformFile.OpenWrite(*testFilePath);
-	if (FileHandle)
-	{
-		FString Guid = FString(
-			TEXT("// This file is written to disk\n")
-			TEXT("// GUID = "))
-			+ FGuid::NewGuid().ToString();
-
-		FileHandle->Write((const uint8*)TCHAR_TO_ANSI(*Guid), Guid.Len());
-
-		delete FileHandle;
-	}
+	CreateDirectoryRecursively(folderPath);
 
 
-	bool result = PlatformFile.CreateDirectory(*folderPath);
+	//FString testFilePath = folderPath + FString("test.txt");
+	//IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+	//IFileHandle* FileHandle = PlatformFile.OpenWrite(*testFilePath);
+	//if (FileHandle)
+	//{
+	//	FString Guid = FString(
+	//		TEXT("// This file is written to disk\n")
+	//		TEXT("// GUID = "))
+	//		+ FGuid::NewGuid().ToString();
+
+	//	FileHandle->Write((const uint8*)TCHAR_TO_ANSI(*Guid), Guid.Len());
+
+	//	delete FileHandle;
+	//}
+	FString connectString = folderPath + FString("save.db");
+
+	
+	//bool result = PlatformFile.CreateDirectory(*folderPath);
 	UE_LOG(LogTemp, Log, TEXT("======================connectString: %s"), *connectString);
 	//const soci::backend_factory* backEnd = soci::factory_sqlite3();
 	//UE_LOG(LogTemp, Log, TEXT("2FolderPath: %s"), *folderPath);
 
 	const soci::backend_factory* backEnd = soci::factory_sqlite3();
-	soci::session sql(*backEnd, "/sdcard/UE4Game/HorizonSOCIDemo/HorizonSOCIDemo/PersistentDownloadDir/Horizon/myFullPath.db");  //android can't open db if path is relative
-	//soci::session sql(*backEnd, std::string(TCHAR_TO_UTF8(*connectString)));
+	//soci::session sql(*backEnd, "/sdcard/UE4Game/HorizonSOCIDemo/HorizonSOCIDemo/PersistentDownloadDir/Horizon/myFullPath.db");  //android can't open db if path is relative
+	soci::session sql(*backEnd, std::string(TCHAR_TO_UTF8(*connectString)));
 	//soci::session sql(*backEnd, ":memory:");
 	/*try {
 	sql << "drop table test1";
