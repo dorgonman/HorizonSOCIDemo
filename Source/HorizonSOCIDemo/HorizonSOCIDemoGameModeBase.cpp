@@ -63,12 +63,10 @@ AHorizonSOCIDemoGameModeBase::AHorizonSOCIDemoGameModeBase() {
 	
 
 #if (PLATFORM_ANDROID)
-	//GExternalFilePath;
-	IAndroidPlatformFile& androidPlatformFile = IAndroidPlatformFile::GetPlatformPhysical();
-	FString folderPath = androidPlatformFile.FileRootPath(TEXT("")) + FPaths::GamePersistentDownloadDir() + "/Horizon/";
-	//folderPath = androidPlatformFile.FileRootPath(*folderPath);
+	extern FString GExternalFilePath;
+	FString folderPath = GExternalFilePath + "/Horizon/";;//androidPlatformFile.FileRootPath(TEXT("")) + FPaths::GamePersistentDownloadDir() 
 #else
-	FString folderPath = (FPaths::GamePersistentDownloadDir() + "/Horizon/");
+	FString folderPath = FPaths::GamePersistentDownloadDir() + "/Horizon/";
 	folderPath = FPaths::ConvertRelativePathToFull(folderPath);
 #endif
 
